@@ -1,17 +1,58 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <a-input @change="handleInput" :value="inputVal" placeholder="请输入任务" class="my_ipt" />
+    <a-button @click="addListItem" type="primary">添加事项</a-button>
+
+    <a-list bordered :data-source="list" class="dt_list">
+      <a-list-item slot="renderItem" slot-scope="item">
+      <!-- 复选框 -->
+      <a-checkbox>{{ item.info }}</a-checkbox>
+      <!-- 删除链接 -->
+      <a slot="actions">删除</a>
+      </a-list-item>
+
+      <!-- footer区域 -->
+      <div slot="footer" class="footer">
+        <span>0条剩余</span>
+
+        <!-- 操作按钮 -->
+        <a-button-group>
+          <a-button type="primary">全部</a-button>
+          <a-button>未完成</a-button>
+          <a-button>已完成</a-button>
+        </a-button-group>
+
+        <!-- 清除已完成 -->
+        <a>清除已完成</a>
+      </div>
+    </a-list>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import { mapState } from 'vuex'
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data () {
+    return {
+    }
+  },
+  created () {
+    this.$store.dispatch('getList')
+  },
+  methods: {
+    handleInput (e) {
+      console.log(e.target.value)
+      this.$store.commit('setInputeValue', e.target.value)
+    },
+    addListItem () {
+      if (this.inputVal.trim().length <= 0) {
+        return this.$message.warning('不能为空！')
+      }
+      this.$store.commit('addItemS')
+    }
+  },
+  computed: {
+    ...mapState(['inputVal', 'list'])
   }
 }
 </script>
@@ -23,6 +64,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  padding: 10px;
+}
+#app .my_ipt{
+  width: 410px;
+}
+#app .dt_list{
+  width: 500px;
+  margin: 10px auto 0;
+}
+.footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
