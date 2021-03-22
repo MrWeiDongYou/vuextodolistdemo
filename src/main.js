@@ -4,7 +4,7 @@ import store from './store'
 
 // 导入ant
 import Antd from 'ant-design-vue'
-// 导入ant
+// 导入ant样式
 import 'ant-design-vue/dist/antd.css'
 Vue.use(Antd)
 
